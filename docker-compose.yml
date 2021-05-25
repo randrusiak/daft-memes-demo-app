@@ -1,0 +1,33 @@
+version: "3.9"
+   
+services:
+  postgres-db:
+    image: postgres:13
+    volumes:
+      - db-data:/var/lib/postgresql/data
+      - ./init-database.sh:/docker-entrypoint-initdb.d/init-database.sh
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+  backend:
+    build: backend
+    ports:
+      - "8080:8080"
+    environment:
+      - DB_NAME=daftmemes
+      - DB_USER=daftmemes
+      - DB_PASS=pa44w0rd
+      - DB_HOST=postgres-db
+      - STORAGE_TYPE=local
+    deploy:
+      restart_policy:
+        condition: any
+    volumes:
+      - image-store:/public
+    depends_on:
+      - postgres-db
+
+volumes:
+  db-data:
+  image-store:
