@@ -48,6 +48,7 @@ func (a *App) Run(dbHost, dbPort, dbUser, dbPassword, dbName string) {
 
 	a.Router.HandleFunc("/memes", a.getAllMemes).Methods("GET")
 	a.Router.HandleFunc("/meme", a.addMeme).Methods("POST")
+	a.Router.HandleFunc("/meme/{id:[0-9]+}", a.deleteMeme).Methods("DELETE")
 
 	if getEnv("STORAGE_TYPE", "local") == "local" {
 		fs := http.FileServer(http.Dir("./public/"))

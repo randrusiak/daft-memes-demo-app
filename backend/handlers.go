@@ -2,11 +2,14 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"io"
 	"net/http"
 	"os"
+	"strconv"
 
 	"github.com/dchest/uniuri"
+	"github.com/gorilla/mux"
 )
 
 // send a payload of JSON content
@@ -51,12 +54,31 @@ func (a *App) addMeme(w http.ResponseWriter, r *http.Request) {
 	m.Title = title
 	m.ImagePath = imagePath
 
-	if err := m.createProduct(a.DB); err != nil {
+	if err := m.createMeme(a.DB); err != nil {
 		a.respondWithError(w, http.StatusInternalServerError, err.Error())
 		return
 	}
 
 	a.respondWithJSON(w, http.StatusCreated, m)
+}
+
+func (a *App) deleteMeme(w http.ResponseWriter, r *http.Request) {
+	var m meme
+
+	vars := mux.Vars(r)
+	id, err := strconv.Atoi(vars["id"])
+	if err != nil {
+		msg := fmt.Sprintf("Invalid meme ID. Error: %s", err.Error())
+		a.respondWithError(w, http.StatusBadRequest, msg)
+		return
+	}
+	m.ID = id
+
+	if err := m.deleteMeme(a.DB); err != nil {
+		a.respondWithError(w, http.StatusInternalServerError, err.Error())
+	}
+
+	a.respondWithJSON(w, http.StatusOK, m)
 }
 
 // getAllMemes returns all memes from the database

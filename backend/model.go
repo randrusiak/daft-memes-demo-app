@@ -20,10 +20,11 @@ func (m *meme) updateMeme(db *sql.DB) error {
 }
 
 func (m *meme) deleteMeme(db *sql.DB) error {
-	return errors.New("Not implemented")
+	_, err := db.Exec("DELETE FROM memes WHERE id=$1", m.ID)
+	return err
 }
 
-func (m *meme) createProduct(db *sql.DB) error {
+func (m *meme) createMeme(db *sql.DB) error {
 	err := db.QueryRow("INSERT INTO memes(title, image_path) VALUES($1, $2) RETURNING id", m.Title, m.ImagePath).Scan(&m.ID)
 	if err != nil {
 		return err
