@@ -4,20 +4,22 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
-	"github.com/gorilla/handlers"
-	"github.com/gorilla/mux"
-	_ "github.com/lib/pq"
 	"log"
 	"net/http"
 	"os"
 	"os/signal"
 	"time"
+
+	"github.com/gorilla/handlers"
+	"github.com/gorilla/mux"
+	_ "github.com/lib/pq"
 )
 
 type App struct {
-	Router *mux.Router
-	DB     *sql.DB
-	Log    *log.Logger
+	Router      *mux.Router
+	DB          *sql.DB
+	Log         *log.Logger
+	StorageType string
 }
 
 func (a *App) Run(dbHost, dbPort, dbUser, dbPassword, dbName string) {
@@ -50,7 +52,7 @@ func (a *App) Run(dbHost, dbPort, dbUser, dbPassword, dbName string) {
 	a.Router.HandleFunc("/meme", a.addMeme).Methods("POST")
 	a.Router.HandleFunc("/meme/{id:[0-9]+}", a.deleteMeme).Methods("DELETE")
 
-	if getEnv("STORAGE_TYPE", "local") == "local" {
+	if a.StorageType == "local" {
 		fs := http.FileServer(http.Dir("./public/"))
 		a.Router.PathPrefix("/public/").Handler(http.StripPrefix("/public/", fs))
 	}

@@ -1,7 +1,9 @@
 package main
 
 func main() {
-	a := App{}
+	a := App{
+		StorageType: getEnv("STORAGE_TYPE", "local"),
+	}
 	a.Run(
 		getEnv("DB_HOST", "localhost"),
 		getEnv("DB_PORT", "5432"),

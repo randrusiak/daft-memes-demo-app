@@ -3,6 +3,7 @@ module github.com/randrusiak/daft-memes-demo-app
 go 1.14
 
 require (
+	cloud.google.com/go/storage v1.15.0
 	github.com/dchest/uniuri v0.0.0-20200228104902-7aecb25e1fe5
 	github.com/gorilla/handlers v1.5.1
 	github.com/gorilla/mux v1.8.0

@@ -32,24 +32,29 @@ func (a *App) respondWithError(w http.ResponseWriter, code int, message string) 
 func (a *App) addMeme(w http.ResponseWriter, r *http.Request) {
 	a.Log.Printf("Handle POST meme")
 	var m meme
+	var imagePath string
 
 	file, header, err := r.FormFile("file")
 	title := r.FormValue("title")
 	filePrefix := uniuri.New()
-	imagePath := "./public/" + filePrefix + header.Filename
 
 	if err != nil {
 		a.Log.Fatal(err)
 	}
 	defer file.Close()
 
-	// copy image to local dir
-	f, err := os.OpenFile(imagePath, os.O_WRONLY|os.O_CREATE, 0666)
-	defer f.Close()
-	_, err = io.Copy(f, file)
+	if a.StorageType == "gcs" {
 
-	if err != nil {
-		a.Log.Fatal(err)
+		imagePath, err = GCSUploadFile(file, filePrefix+header.Filename)
+	} else {
+		imagePath = "./public/" + filePrefix + header.Filename
+		f, err := os.OpenFile(imagePath, os.O_WRONLY|os.O_CREATE, 0666)
+		defer f.Close()
+		_, err = io.Copy(f, file)
+
+		if err != nil {
+			a.Log.Fatal(err)
+		}
 	}
 
 	m.Title = title
