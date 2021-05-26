@@ -1,15 +1,17 @@
-import axios from 'axios';
+import axios from "axios";
+import { mapMemes, formatMeme } from "../helpers";
+import { API_URL } from "../consts";
 
 const ENDPOINTS = {
-  memes: '/memes',
-  meme: '/meme'
-}
+  memes: "/memes",
+  meme: "/meme",
+};
 
 export default class ApiClient {
-  constructor () {
+  constructor() {
     this.API = axios.create({
-      baseURL: 'http://localhost:8080'
-    })
+      baseURL: API_URL,
+    });
   }
 
   async getMemes() {
@@ -19,25 +21,27 @@ export default class ApiClient {
     } catch (e) {
       throw e;
     }
-    return response && response.status === 200 ? response.data : null;
+    return response && response.status === 200 ? mapMemes(response.data) : null;
   }
 
   async addMeme(title, file) {
     let response = null;
     const formData = new FormData();
-    formData.append('title',title);
-    formData.append('file',file);
+    formData.append("title", title);
+    formData.append("file", file);
     const config = {
       headers: {
-        'content-type': 'multipart/form-data'
-      }
-    }
+        "content-type": "multipart/form-data",
+      },
+    };
     try {
       response = await this.API.post(ENDPOINTS.meme, formData, config);
     } catch (e) {
       return null;
     }
-    return response && response.status === 201 ? response.data : null;
+    return response && response.status === 201
+      ? formatMeme(response.data)
+      : null;
   }
 
   async deleteMeme(id) {
@@ -45,9 +49,8 @@ export default class ApiClient {
     try {
       response = await this.API.delete(`${ENDPOINTS.meme}/${id}`);
     } catch (e) {
-      return null
+      return null;
     }
     return response && response.status === 200 ? response.data : null;
   }
-
 }
