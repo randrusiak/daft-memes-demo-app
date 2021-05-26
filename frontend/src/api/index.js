@@ -7,7 +7,7 @@ const ENDPOINTS = {
 export default class ApiClient {
   constructor () {
     this.API = axios.create({
-      baseURL: 'localhost:8080'
+      baseURL: 'http://localhost:8080'
     })
   }
 
