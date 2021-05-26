@@ -18,7 +18,7 @@ function App() {
 
   const clearFileInput = () => {
     setFileKey(new Date());
-  }
+  };
 
   const handleSubmit = async (e) => {
     const res = await api.addMeme(title, image);
@@ -40,11 +40,12 @@ function App() {
     setImage(file);
   };
 
-  const deleteMeme = async id => {
+  const deleteMeme = async (id) => {
     const res = await api.deleteMeme(id.toString());
-    console.log('delete');
-    console.log(res);
-  }
+    if (res) {
+      setMemes(memes.filter((item) => item.id !== id));
+    }
+  };
 
   const renderMemes = (list) => {
     return (
@@ -52,7 +53,9 @@ function App() {
         {list.map((item) => {
           return (
             <div key={item.id} className="meme">
-              <div className="cross" onClick={() => deleteMeme(item.id)}>X</div>
+              <div className="cross" onClick={() => deleteMeme(item.id)}>
+                X
+              </div>
               <p>{item.title}</p>
               <img src={item.imagePath} alt={item.title} />
             </div>
@@ -70,7 +73,11 @@ function App() {
             <Form.Label>Title:</Form.Label>
             <Form.Control type="text" value={title} onChange={handleInput} />
             <Form.Label>Image:</Form.Label>
-            <Form.Control key={fileKey} type="file" onChange={handleFileInput} />
+            <Form.Control
+              key={fileKey}
+              type="file"
+              onChange={handleFileInput}
+            />
             <Button type="button" onClick={handleSubmit}>
               Submit
             </Button>

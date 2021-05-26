@@ -47,7 +47,7 @@ export default class ApiClient {
     } catch (e) {
       return null
     }
-    return response;
+    return response && response.status === 200 ? response.data : null;
   }
 
 }
