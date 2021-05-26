@@ -30,6 +30,7 @@ func (a *App) respondWithError(w http.ResponseWriter, code int, message string) 
 
 // addMeme adds meme to database
 func (a *App) addMeme(w http.ResponseWriter, r *http.Request) {
+	a.Log.Printf("Handle POST meme")
 	var m meme
 
 	file, header, err := r.FormFile("file")
@@ -63,6 +64,7 @@ func (a *App) addMeme(w http.ResponseWriter, r *http.Request) {
 }
 
 func (a *App) deleteMeme(w http.ResponseWriter, r *http.Request) {
+	a.Log.Printf("Handle DELETE meme")
 	var m meme
 
 	vars := mux.Vars(r)
