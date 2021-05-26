@@ -37,7 +37,7 @@ services:
     depends_on:
       - backend
     environment: 
-      - API_URL="http://localhost:8080"
+      - REACT_APP_API_URL=http://localhost:8080
 volumes:
   db-data:
   image-store:
