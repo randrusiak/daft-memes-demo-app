@@ -1,7 +1,8 @@
 import axios from 'axios';
 
 const ENDPOINTS = {
-  memes: '/memes'
+  memes: '/memes',
+  meme: '/meme'
 }
 
 export default class ApiClient {
@@ -19,6 +20,34 @@ export default class ApiClient {
       throw e;
     }
     return response && response.status === 200 ? response.data : null;
+  }
+
+  async addMeme(title, file) {
+    let response = null;
+    const formData = new FormData();
+    formData.append('title',title);
+    formData.append('file',file);
+    const config = {
+      headers: {
+        'content-type': 'multipart/form-data'
+      }
+    }
+    try {
+      response = await this.API.post(ENDPOINTS.meme, formData, config);
+    } catch (e) {
+      return null;
+    }
+    return response && response.status === 201 ? response.data : null;
+  }
+
+  async deleteMeme(id) {
+    let response = null;
+    try {
+      response = await this.API.delete(`${ENDPOINTS.meme}/${id}`);
+    } catch (e) {
+      return null
+    }
+    return response;
   }
 
 }
