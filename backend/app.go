@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"database/sql"
+	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
@@ -51,6 +52,11 @@ func (a *App) Run(dbHost, dbPort, dbUser, dbPassword, dbName string) {
 	a.Router.HandleFunc("/memes", a.getAllMemes).Methods("GET")
 	a.Router.HandleFunc("/meme", a.addMeme).Methods("POST")
 	a.Router.HandleFunc("/meme/{id:[0-9]+}", a.deleteMeme).Methods("DELETE")
+	
+	// simple health check endpoint
+	a.Router.HandleFunc("/healthz", func(w http.ResponseWriter, r *http.Request) {
+		json.NewEncoder(w).Encode(map[string]bool{"ok": true})
+	})
 
 	if a.StorageType == "local" {
 		fs := http.FileServer(http.Dir("./public/"))
