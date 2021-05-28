@@ -46,6 +46,9 @@ func (a *App) addMeme(w http.ResponseWriter, r *http.Request) {
 	if a.StorageType == "gcs" {
 
 		imagePath, err = GCSUploadFile(file, filePrefix+header.Filename)
+		if err != nil {
+			a.Log.Fatal(err)
+		}
 	} else {
 		imagePath = "./public/" + filePrefix + header.Filename
 		f, err := os.OpenFile(imagePath, os.O_WRONLY|os.O_CREATE, 0666)
