@@ -19,15 +19,15 @@ services:
       - DB_USER=daftmemes
       - DB_PASS=pa44w0rd
       - DB_HOST=postgres-db
-      - STORAGE_TYPE=gcs
-      - GOOGLE_APPLICATION_CREDENTIALS=/credentials.json
-      - GCS_BUCKET_NAME=daft-memes
+      - STORAGE_TYPE=local
+#      - GOOGLE_APPLICATION_CREDENTIALS=/credentials.json
+#      - GCS_BUCKET_NAME=daft-memes
     deploy:
       restart_policy:
         condition: any
     volumes:
       - image-store:/public
-      - ./credentials.json:/credentials.json
+      #- ./credentials.json:/credentials.json
     depends_on:
       - postgres-db
   frontend:
