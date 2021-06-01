@@ -11,6 +11,15 @@ type meme struct {
 	ImagePath string `json:"imagePath"`
 }
 
+func (m *meme) createMemesTable(db *sql.DB) error {
+	_, err := db.Exec(`CREATE TABLE IF NOT EXISTS memes (
+		id SERIAL,
+		title TEXT NOT NULL,
+		image_path TEXT NOT NULL,
+		CONSTRAINT memes_pkey PRIMARY KEY (id))`)
+	return err
+}
+
 func (m *meme) getMeme(db *sql.DB) error {
 	return errors.New("Not implemented")
 }
