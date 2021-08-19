@@ -12,7 +12,7 @@ Podczas zajęć nie będzie konieczności uruchamiana aplikacji lokalnie. Jeśli
 
 Więcej szczegółów: 
  - [daftacademy.pl](https://daftacademy.pl/courses/ZPptVZ)
- - [daftacademy-gcp-infrastructure](https://github.com/randrusiak/daftacademy-gcp-infrastructure)
+ - [daftacademy-gcp-terraform](https://github.com/randrusiak/daftacademy-gcp-terraform)
 
 ## Frontend
 
